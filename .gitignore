@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 progress.txt
 dg.txt
+expected_completion.txt
