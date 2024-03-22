@@ -1,2 +1,2 @@
 # coruscant
-list of nested dicts to table
+Accepts a list of nested dicts and returns a table.
