@@ -161,3 +161,4 @@ cython_debug/
 progress.txt
 dg.txt
 expected_completion.txt
+last_modified.pickle
