@@ -2,11 +2,20 @@ from typing import List
 from f.obj.is_zeroish import f as is_zeroish
 
 class Vector:
-  def __init__(self, values: List): self._values = values
+  def __init__(self, values: List):
+    self._type = type(values[0])
+    for v in values:
+      if not(type(v) == self._type or type(v) == type(None)):
+        raise TypeError('\n'.join([
+          'vector does not have homogenous type',
+          f'observation_a: {type(values[0])}',
+          f'observation_b: {type(v)}'
+        ]))
+    self._values = values
   is_zeroish = property(lambda self: all([is_zeroish(_) for _ in self.v]))
   v = values = property(lambda self: self._values)
   h = height = property(lambda self: len(self._values))
-  t = type = property(lambda self: type(self._values[0]))
+  t = type = property(lambda self: self._type)
   
   def _get_unit_str(self):
     if self.type == type(0): return 'int'
@@ -66,4 +75,21 @@ def t():
     if not t_eq_1(): return pf('!t_eq_1')
     return 1
   if not t_eq(): return pf('!t_eq')
+
+  def t_type_homogeneity():
+    def t_type_homogeneity_0():
+      class K: pass
+      x = {'values': [0, 'a', K()]}
+      y = 'vector does not have homogenous type'
+      try: z = f(x); return 0
+      except TypeError as te: z = str(te)
+      return (y in z) or pf(['y not in z' f'x: {x}', f'y: {y}', f'z: {z}'])
+    if not t_type_homogeneity_0(): return pf('!t_type_homogeneity_0')
+    def t_type_homogeneity_1():
+      x = {'values': ['a', 'b', 'c']}
+      try: f(x); return 1
+      except TypeError: return pf('Unexpected TypeError raised')
+    if not t_type_homogeneity_1(): return pf('!t_type_homogeneity_1')
+    return 1
+  if not t_type_homogeneity(): return pf('!t_type_homogeneity')
   return 1
