@@ -29,6 +29,7 @@ class Vector:
   w = width = property(lambda self: self._w)
 
   __eq__ = lambda left, right: left.values == right.values
+  __repr__ = lambda self: self.__class__.__name__+'('+repr(self._values)+')'
 
 f = lambda x: Vector(**x)
 
@@ -96,4 +97,9 @@ def t():
     if not t_type_homogeneity_1(): return pf('!t_type_homogeneity_1')
     return 1
   if not t_type_homogeneity(): return pf('!t_type_homogeneity')
+
+  def t_repr():
+    x = {'values': [0, 0, 1]}
+    return pxyz(x, f"Vector({x['values']})", repr(f(x)))
+  if not t_repr(): return pf('!t_repr')
   return 1
