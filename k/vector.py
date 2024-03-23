@@ -1,5 +1,6 @@
 from typing import List
 from f.obj.is_zeroish import f as is_zeroish
+from k.unit import Unit as U
 
 class Vector:
   def __init__(self, values: List):
@@ -19,11 +20,14 @@ class Vector:
   h = height = property(lambda self: len(self._values))
   t = type = property(lambda self: self._type)
   
-  def _get_unit_str(self):
-    if self.type == type(0): return 'int'
-    return 'blergh'
+  def _get_unit(self) -> U:
+    if self.type == type(0): return U('int')
+    raise NotImplementedError('\n'.join([
+      '!24',
+      f'self.type: {self.type}'
+    ]))
 
-  u = unit = unit_str = property(lambda self: self._get_unit_str())
+  u = unit = unit_str = property(lambda self: self._get_unit())
   w = width = property(lambda self: self._w)
 
   __eq__ = lambda left, right: left.values == right.values
@@ -50,7 +54,7 @@ def t():
 
   def t_unit():
     x = {'values': [0, 10, 100]}
-    return pxyz(x, 'int', f(x).u)
+    return pxyz(x, U('int'), f(x).u)
   if not t_unit(): return pf('!t_unit')
   
   def t_h():
