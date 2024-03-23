@@ -1,0 +1,1 @@
+alignment = {'left', 'centre', 'right'}
