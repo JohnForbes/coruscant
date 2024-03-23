@@ -64,5 +64,6 @@ def t():
     if not t_eq_0(): return pf('!t_eq_0')
     t_eq_1 = lambda: f({'values': [0, 10, 100]}) == f({'values': [0, 10, 100]})
     if not t_eq_1(): return pf('!t_eq_1')
+    return 1
   if not t_eq(): return pf('!t_eq')
   return 1
