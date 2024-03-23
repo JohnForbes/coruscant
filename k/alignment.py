@@ -8,8 +8,6 @@ class Alignment(String):
     ]))
     super().__init__(value)
 
-  __hash__ = lambda self: hash(self._value)
-
 f = lambda x: Alignment(**x)
 
 def t():
@@ -20,3 +18,9 @@ def t():
     x = {'value': str(rand_alignment())}
     return pxyz(x, x['value'], str(f(x)))
   if not t_a(): return pf('!t_a')
+  def t_out_of_domain():
+    x = {'value': 'elephant'}
+    try: f(x); return 0
+    except ValueError: return 1
+  if not t_out_of_domain(): return pf('!t_out_of_domain')
+  return 1
