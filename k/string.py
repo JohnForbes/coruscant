@@ -9,6 +9,7 @@ class String:
     self._value = value
   __str__ = lambda self: str(self._value)
   w = width = property(lambda self: len(self._value))
+  __eq__ = lambda left, right: str(left) == str(right)
 
 f = lambda x: String(**x)
 
@@ -39,4 +40,12 @@ def t():
     if not t_type_error_1(): return pf('!t_type_error_1')
     return 1
   if not t_type_error(): return pf('!t_type_error')
+
+  def t_eq():
+    def t_eq_0(): return String('A') != String('B')
+    if not t_eq_0(): return pf('!t_eq_0')
+    def t_eq_1(): return String('A') == String('A')
+    if not t_eq_1(): return pf('!t_eq_1')
+    return 1
+  if not t_eq(): return pf('!t_eq')
   return 1
