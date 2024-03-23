@@ -1,7 +1,7 @@
-from k.vector import Vector as V
 from k.block import Block as B
 from k.name import Name as N
 from k.unit import Unit as U
+from k.vector import Vector as V
 
 class LeafBlock(B):
   def __init__(self, name: N, vector: V):
@@ -19,26 +19,27 @@ class LeafBlock(B):
     ]))
     self._vector = vector
 
+    _hbar = '-'*self.w
     _lines = [
       name,
-      self._vector.unit,
-      *self._vector.values
+      _hbar,
+      self.v.unit,
+      _hbar,
+      *self.v.values
     ]
-    super().__init__(lines=_lines)
+    _alignment = 'right'
+    super().__init__(lines=_lines, alignment=_alignment)
+
+  __repr__ = lambda self: self.__class__.__name__+'('+', '.join([
+    'name='+repr(self._name),
+    'vector='+repr(self._vector)
+  ])+')'
   
-  _get_unit_str = lambda self: self._v.type
-
-  def _get_width(self) -> int:
-    w_v = self._vector.width
-    w_n = self._name.width
-    print(f'type(self._vector.unit): {type(self._vector.unit)}')
-    raise NotImplementedError('!')
-    w_u = self._vector.unit.width
-    return max([w_v, w_n, w_u])
-
-  t = type = property(lambda self: self._v.type)
-  u = unit = unit_str = property(lambda self: U(self._v.unit_str))
-  w = width = property(lambda self: self._get_width())
+  n = name = property(lambda self: self._name)
+  t = type = property(lambda self: self.v.type)
+  u = unit = unit_str = property(lambda self: self.v.unit_str)
+  v = vector = property(lambda self: self._vector)
+  w = width = property(lambda self: max([self.v.w, self.n.w, self.v.u.w]))
 
 f = lambda x: LeafBlock(**x)
 
@@ -47,47 +48,67 @@ def t():
   from hak.pxyz import f as pxyz
   def t_a():
     x = {'name': N('foo'), 'vector': V(['a', 'bb'])}
-    y = B([
-      'foo',
-      '---',
-      'str',
-      '---',
-      'a  ',
-      'bb '
-    ])
+    y = B(
+      lines=[
+        'foo',
+        '---',
+        'str',
+        '---',
+        '  a',
+        ' bb'
+      ],
+      alignment='right'
+    )
     z = f(x)
-    return pxyz(x, y, z)
+    return pxyz(x, [str(y)], [str(z)], new_line=1)
   if not t_a(): return pf('!t_a')
-
-  # def __init__(self, name: str, vector: Vector):
-  #   if not isinstance(name, str): raise TypeError('\n'.join([
-  #     'name must be of type str',
-  #     f'observed type: {type(name)}',
-  #     f'observed value: {name}'
-  #   ]))
-  #   self._name = name
-
-  #   if not isinstance(vector, Vector): raise TypeError('\n'.join([
-  #     'vector must be of type str',
-  #     f'observed type: {type(vector)}',
-  #     f'observed value: {vector}'
-  #   ]))
-  #   self._vector = vector
-  
-  # _get_unit_str = lambda self: self._v.type
-
-  # def _get_width(self) -> int:
-  #   return max([self._vector.w, self._name.w, self._vector._unit.w])
-
-  # t = type = property(lambda self: self._v.type)
-  # u = unit = unit_str = property(lambda self: self._v.unit_str)
-  # w = width = property(lambda self: self._get_width())
-  # fix this t
-
-  # test that width is an int
-  # test that width is in [0, inf]
-  # test that width is sensible given the data
-  # t_type
-  # t_unit
-  # t_width
+  def t_name():
+    x = {'name': N('foo'), 'vector': V([0, 1])}
+    return pxyz(x, N('foo'), f(x).n)
+  if not t_name(): return pf('!t_name')
+  def t_repr():
+    x = {'name': N('foo'), 'vector': V(['a', 'bb'])}
+    y = "LeafBlock(name=Name('foo'), vector=Vector(['a', 'bb']))"
+    return pxyz(x, y, repr(f(x)))
+  if not t_repr(): return pf('!t_repr')
+  def t_type():
+    x = {'name': N('foo'), 'vector': V(['a', 'bb'])}
+    return pxyz(x, type('-'), f(x).type)
+  if not t_type(): return pf('!t_type')
+  def t_type_error():
+    def t_type_error_name():
+      x = {'name': 'foo', 'vector': V(['a', 'bb'])}
+      try: f(x); return 0
+      except TypeError: return 1
+    if not t_type_error_name(): return pf('!t_type_error_name')
+    def t_type_error_vector():
+      x = {'name': N('foo'), 'vector': ['a', 'bb']}
+      try: f(x); return 0
+      except TypeError: return 1
+    if not t_type_error_vector(): return pf('!t_type_error_vector')
+    return 1
+  if not t_type_error(): return pf('!t_type_error')
+  def t_unit():
+    x = {'name': N('foo'), 'vector': V(['a', 'bb'])}
+    return pxyz(x, U('str'), f(x).unit)
+  if not t_unit(): return pf('!t_unit')
+  def t_vector():
+    x = {'name': N('foo'), 'vector': V([0, 1, 2])}
+    return pxyz(x, V([0, 1, 2]), f(x).v)
+  if not t_vector(): return pf('!t_vector')
+  def t_width():
+    def t_width_name():
+      x = {'name': N('foo'), 'vector': V(['a', 'bb'])}      
+      return pxyz(x, 3, f(x).w)
+    if not t_width_name(): return pf('!t_width_name')
+    def t_width_vector():
+      x = {'name': N('foo'), 'vector': V(['a', 'bb', 'ccc', 'dddd'])}
+      return pxyz(x, 4, f(x).w)
+    if not t_width_vector(): return pf('!t_width_vector')
+    def t_width_vector_unit():
+      x = {'name': N('oo'), 'vector': V(['a', 'bb'])}
+      return pxyz(x, 3, f(x).w)
+    if not t_width_vector_unit(): return pf('!t_width_vector_unit')
+    return 1
+  if not t_width(): return pf('!t_width')
   return 1
