@@ -12,6 +12,8 @@ class Vector:
           f'observation_b: {type(v)}'
         ]))
     self._values = values
+    self._w = max([len(str(_)) for _ in self._values])
+
   is_zeroish = property(lambda self: all([is_zeroish(_) for _ in self.v]))
   v = values = property(lambda self: self._values)
   h = height = property(lambda self: len(self._values))
@@ -22,7 +24,7 @@ class Vector:
     return 'blergh'
 
   u = unit = unit_str = property(lambda self: self._get_unit_str())
-  w = width = property(lambda self: max([len(str(_)) for _ in self._values]))
+  w = width = property(lambda self: self._w)
 
   __eq__ = lambda left, right: left.values == right.values
 
