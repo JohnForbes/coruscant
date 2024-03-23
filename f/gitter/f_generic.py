@@ -19,7 +19,8 @@ def f(a, b, ask):
       '.pkl'
     ]]):
       save(a, load(a))
-    sprun(args=['code', a])
+    # sprun(args=['code', a])
+    sprun(args=['cursor', a])
   __=mag(a)
 
   response=input(cy(f"Proceed with '")+a+cy(f"'? (Q/Y/N):")) if ask else 'Y'
