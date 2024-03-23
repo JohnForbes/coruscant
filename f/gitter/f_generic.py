@@ -5,7 +5,6 @@ from hak.string.colour.bright.magenta import f as mag
 from os.path import exists
 from subprocess import run as sprun
 
-# f_X
 def f(a, b, ask):
   if exists(a):
     print(f'a: {mag(a)}')
@@ -20,7 +19,6 @@ def f(a, b, ask):
     ]]):
       save(a, load(a))
     sprun(args=['code', a])
-    # sprun(args=['cursor', a])
   __=mag(a)
 
   response=input(cy(f"Proceed with '")+a+cy(f"'? (Q/Y/N):")) if ask else 'Y'
