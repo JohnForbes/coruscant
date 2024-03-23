@@ -1,5 +1,5 @@
 from hak.directory.clean import f as clean_directory
-from hak.test.do import f as do_test
+from f.project.test import f as do_test
 from hak.test.final_line.check import f as _check_final_line
 from hak.test.line_lengths.check import f as _check_line_lengths
 from hak.test.oldest_file.print import f as _print_oldest_file
