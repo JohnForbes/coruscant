@@ -10,6 +10,8 @@ class String:
   __str__ = lambda self: str(self._value)
   w = width = property(lambda self: len(self._value))
   __eq__ = lambda left, right: str(left) == str(right)
+  __format__ = lambda self, format_spec: str(self).__format__(format_spec)
+  __repr__ = lambda self: self.__class__.__name__+'('+repr(self._value)+')'
 
 f = lambda x: String(**x)
 
