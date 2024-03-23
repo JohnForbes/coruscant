@@ -1,4 +1,3 @@
-# project_has_outstanding_commits
 def f():
   from subprocess import run as sprun
   _ = sprun(args=['git', 'status', '-s'], capture_output=True, cwd='.')
