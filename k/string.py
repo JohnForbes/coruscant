@@ -12,6 +12,7 @@ class String:
   __eq__ = lambda left, right: str(left) == str(right)
   __format__ = lambda self, format_spec: str(self).__format__(format_spec)
   __repr__ = lambda self: self.__class__.__name__+'('+repr(self._value)+')'
+  __hash__ = lambda self: hash(self._value)
 
 f = lambda x: String(**x)
 
@@ -50,4 +51,9 @@ def t():
     if not t_eq_1(): return pf('!t_eq_1')
     return 1
   if not t_eq(): return pf('!t_eq')
+
+  def t_hash():
+    x = {'value': 'abc'}
+    return hash(x['value']) == hash(f(x))
+  if not t_hash(): return pf('!t_hash')
   return 1
