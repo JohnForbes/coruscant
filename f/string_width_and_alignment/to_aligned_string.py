@@ -1,38 +1,27 @@
-def f(string, width, alignment):
-  from d.domains import alignment as alignment_domain
-  if alignment not in alignment_domain: raise ValueError('\n'.join([
-    'alignment not in expected domain',
-    f'alignment_domain: {alignment_domain}'
-  ]))
-  if alignment == 'left': return f'{string:<{width}}'
-  if alignment == 'centre': return f'{string:^{width}}'
-  if alignment == 'right': return f'{string:>{width}}'
+from k.alignment import Alignment as A
+
+def f(string: str, width: int, alignment: A) -> str:
+  if alignment == A('left'): return f'{string:<{width}}'
+  if alignment == A('centre'): return f'{string:^{width}}'
+  if alignment == A('right'): return f'{string:>{width}}'
   raise NotImplementedError('\n'.join([
     'This line should be unreachable.',
-    'Something has gone wrong.'
+    'Something went wrong.'
   ]))
 
 def t():
-  from hak.pxyz import f as pxyz
   from hak.pf import f as pf
+  from hak.pxyz import f as pxyz
   def t_left():
     x = {'string': 'foo', 'width': 5, 'alignment': 'left'}
-    y = 'foo  '
-    return pxyz(x, y, f(**x))
+    return pxyz(x, 'foo  ', f(**x))
   if not t_left(): return pf('!t_left')
   def t_centre():
     x = {'string': 'foo', 'width': 5, 'alignment': 'centre'}
-    y = ' foo '
-    return pxyz(x, y, f(**x))
+    return pxyz(x, ' foo ', f(**x))
   if not t_centre(): return pf('!t_centre')
   def t_right():
     x = {'string': 'foo', 'width': 5, 'alignment': 'right'}
-    y = '  foo'
-    return pxyz(x, y, f(**x))
+    return pxyz(x, '  foo', f(**x))
   if not t_right(): return pf('!t_right')
-  def t_out_of_domain():
-    x = {'string': 'foo', 'width': 4, 'alignment': 'elephant'}
-    try: f(**x); return 0
-    except ValueError: return 1
-  if not t_out_of_domain(): return pf('!t_out_of_domain')
   return 1
