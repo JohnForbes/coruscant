@@ -1,5 +1,5 @@
 def f(string, width, alignment):
-  alignment_domain = {'left', 'centre', 'right'}
+  from d.domains import alignment as alignment_domain
   if alignment not in alignment_domain: raise ValueError('\n'.join([
     'alignment not in expected domain',
     f'alignment_domain: {alignment_domain}'
