@@ -20,19 +20,9 @@ def f(filepaths):
     for _ip in _import_path_to_filepath:
       _ip_1 = f'{_ip} import '
       if _fp != _import_path_to_filepath[_ip]:
-        if any([
-          '.'+_ip_1 in content,
-          ' '+_ip_1 in content
-        ]):
+        if any(['.'+_ip_1 in content, ' '+_ip_1 in content]):
           dependencies[_fp].add(_import_path_to_filepath[_ip])
 
   return dependencies
 
-def t():
-  # from hak.directory.filepaths.get import f as get_filepaths
-  # x = get_filepaths(filepaths=[], root='./f')
-  # y = {}
-  # z = f(x)
-  # from hak.pxyz import f as pxyz
-  # return pxyz(x, y, z)
-  return 1
+t = lambda: 1
