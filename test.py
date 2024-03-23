@@ -4,6 +4,8 @@ from hak.test.final_line.check import f as _check_final_line
 from hak.test.line_lengths.check import f as _check_line_lengths
 from hak.test.oldest_file.print import f as _print_oldest_file
 from f.analyse_lines import f as analyse_lines
+from f.find_next_comment import f as find_next_comment
+from f.project_has_outstanding_commits import f as project_has_outstanding_commits
 
 def main():
   print('|'+'-'*78+'|')
@@ -16,6 +18,9 @@ def main():
 
   print('|'+'-'*78+'|')
   analyse_lines()
+  if z['result'] and not project_has_outstanding_commits():
+    print('|'+'-'*78+'|')
+    find_next_comment()
   print('|'+'-'*78+'|')
   clean_directory('.')
   return z['result']
