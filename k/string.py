@@ -16,8 +16,8 @@ class String:
 f = lambda x: String(**x)
 
 def t():
-  from hak.pxyz import f as pxyz
   from hak.pf import f as pf
+  from hak.pxyz import f as pxyz
   def t_init_and_to_string():
     x = {'value': 'abc'}
     return pxyz(x, x['value'], str(f(x)))
