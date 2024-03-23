@@ -22,10 +22,8 @@ class Vector:
   
   def _get_unit(self) -> U:
     if self.type == type(0): return U('int')
-    raise NotImplementedError('\n'.join([
-      '!24',
-      f'self.type: {self.type}'
-    ]))
+    if self.type == type('a'): return U('str')
+    raise NotImplementedError('\n'.join(['!26', f'self.type: {self.type}']))
 
   u = unit = unit_str = property(lambda self: self._get_unit())
   w = width = property(lambda self: self._w)
