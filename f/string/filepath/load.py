@@ -9,7 +9,6 @@ def t():
     from os.path import exists
     from os import mkdir
     [mkdir(temp_dir) for temp_dir in [temp_dir_0] if not exists(temp_dir)]
-    # from f.strings.filepath_and_content.save import f as save
     from hak.file.save import f as save
     [save(filename, content) for (filename, content) in temp_files_and_content]
   up()
