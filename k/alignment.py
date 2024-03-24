@@ -6,7 +6,7 @@ class Alignment(String):
       'value not in expected domain',
       f'alignment_domain: {alignment_domain}'
     ]))
-    super().__init__(value)
+    super().__init__(value[0])
 
 f = lambda x: Alignment(**x)
 
