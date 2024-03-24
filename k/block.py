@@ -1,6 +1,6 @@
 from typing import List
 
-from f.string_width_and_alignment.to_aligned_string import f as _f_align
+from f.alignment_string_and_width.to_aligned_string import f as _f_align
 from k.alignment import Alignment as A
 
 class Block:
@@ -14,7 +14,13 @@ class Block:
     self._alignment = alignment
 
   w = width = property(lambda s: max([len(str(l)) for l in s._lines]))
-  lines = property(lambda s: [_f_align(l, s.w, s._alignment) for l in s._lines])
+  lines = property(
+    lambda s: [
+      _f_align(alignment=s._alignment, string=str(l), width=s.width)
+      for l
+      in s._lines
+    ]
+  )
   h = height = property(lambda s: len(s._lines))
   __eq__ = lambda u, v: u.lines == v.lines
   __str__ = lambda s: '\n'.join(s.lines)
