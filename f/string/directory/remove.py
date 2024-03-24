@@ -22,7 +22,6 @@ def t():
     from f.obj.nop import f as nop
     (mkdir if not exists(temp_dir) else nop)(temp_dir)
 
-    # from f.strings.filepath_and_content.save import f as save
     from hak.file.save import f as save
     [save(filename, content) for (filename, content) in temp_files_and_content]
   up()
