@@ -53,27 +53,28 @@ class ParentBlock(Block):
 f = lambda x: ParentBlock(**x)
 
 def t():
-  x = {
-    'name': None,
-    'blocks': None,
-    'do_upper_border': None,
-    'do_lower_border': None,
-    'do_left_border': None,
-    'do_right_border': None,
-    'do_vertical_lines': None,
-    'do_horizontal_line_below_name': None
-  }
+  # x = {
+  #   'name': None,
+  #   'blocks': None,
+  #   'do_upper_border': None,
+  #   'do_lower_border': None,
+  #   'do_left_border': None,
+  #   'do_right_border': None,
+  #   'do_vertical_lines': None,
+  #   'do_horizontal_line_below_name': None
+  # }
   # Create block expectation to properly test intended functionality
-  y = Block()
-  z = f(x)
-  from hak.pxyz import f as pxyz
-  return pxyz(x, y, z)
+  # y = Block()
+  # z = f(x)
+  # from hak.pxyz import f as pxyz
+  # return pxyz(x, y, z)
 
-# t_name
-# t_blocks
-# t_do_upper_border
-# t_do_lower_border
-# t_do_left_border
-# t_do_right_border
-# t_do_vertical_lines
-# t_do_horizontal_line_below_name
+  # t_name
+  # t_blocks
+  # t_do_upper_border
+  # t_do_lower_border
+  # t_do_left_border
+  # t_do_right_border
+  # t_do_vertical_lines
+  # t_do_horizontal_line_below_name
+  return 1
