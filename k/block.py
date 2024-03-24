@@ -1,4 +1,5 @@
 from typing import List
+
 from f.string_width_and_alignment.to_aligned_string import f as _f_align
 from k.alignment import Alignment as A
 
@@ -21,6 +22,23 @@ class Block:
 
   def append(s, line: str):
     s._lines += line.split('\n') if '\n' in line else [line]
+  
+  def carry_down_vertical_lines(self):
+    lines = self.lines
+    revised_lines = [lines[0]]
+    for i in range(len(lines)-1):
+      revised_line = ''
+      for j in range(len(lines[i])):
+        if any([
+          lines[i][j] == '|' and lines[i][j] != lines[i+1][j],
+          revised_lines[i][j] == '|'
+        ]):
+          _ = '|'
+        else:
+          _ = lines[i+1][j]
+        revised_line += _
+      revised_lines.append(revised_line)
+    return Block(revised_lines)
 
 f = lambda x: Block(**x)
 
@@ -86,4 +104,11 @@ def t():
     try: f(x); return 0
     except TypeError: return 1
   if not t_alignment_te(): return pf('!t_alignment_te')
+
+  def t_carry_down_vert_lines():
+    x = {'lines': ['|  |', '|   ', '    ']}
+    y = ['|  |', '|  |', '|  |']
+    z = f(x).carry_down_vertical_lines().lines
+    return pxyz(x['lines'], y, z)
+  if not t_carry_down_vert_lines(): return pf('!t_carry_down_vert_lines')
   return 1
