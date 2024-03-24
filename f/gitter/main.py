@@ -39,6 +39,7 @@ def _f(dependency_graph, committable_filepaths):
   print(filepaths)
   return filepaths[0] if filepaths else None
 
+# main
 def f(ask):
   git_pull()
   status_result = git_status()
