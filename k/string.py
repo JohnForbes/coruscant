@@ -6,13 +6,13 @@ class String:
         f'observed type: {type(value)}',
         f'observed value: {value}'
       ]))
-    self._value = value
-  __str__ = lambda self: str(self._value)
-  w = width = property(lambda self: len(self._value))
+    self._v = value
+  __str__ = lambda self: str(self._v)
+  w = width = property(lambda self: len(self._v))
   __eq__ = lambda left, right: str(left) == str(right)
   __format__ = lambda self, format_spec: str(self).__format__(format_spec)
-  __repr__ = lambda self: self.__class__.__name__+'('+repr(self._value)+')'
-  __hash__ = lambda self: hash(self._value)
+  __repr__ = lambda self: self.__class__.__name__+'('+repr(self._v)+')'
+  __hash__ = lambda self: hash(self._v)
 
 f = lambda x: String(**x)
 
@@ -24,9 +24,7 @@ def t():
     return pxyz(x, x['value'], str(f(x)))
   if not t_init_and_to_string(): return pf('!t_init_and_to_string')
 
-  def t_w():
-    x = {'value': 'abc'}
-    return pxyz(x, len(x['value']), f(x).w)
+  def t_w(): x = {'value': 'abc'}; return pxyz(x, len(x['value']), f(x).w)
   if not t_w(): return pf('!t_w')
 
   def t_type_error():
@@ -52,8 +50,6 @@ def t():
     return 1
   if not t_eq(): return pf('!t_eq')
 
-  def t_hash():
-    x = {'value': 'abc'}
-    return hash(x['value']) == hash(f(x))
+  def t_hash(): x = {'value': 'abc'}; return hash(x['value']) == hash(f(x))
   if not t_hash(): return pf('!t_hash')
   return 1
