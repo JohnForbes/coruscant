@@ -1,1 +1,1 @@
-alignment = {'left', 'centre', 'right'}
+alignment = {'c', 'center', 'centre', 'l', 'left', 'r', 'right'}
