@@ -4,7 +4,6 @@ from subprocess import run as sprun
 from f.string.filepath.load import f as load
 from f.string.to_cy import f as cy
 from f.string.to_mg import f as mag
-# from f.strings.filepath_and_content.save import f as save
 from hak.file.save import f as save
 
 def f(a, b, ask):
