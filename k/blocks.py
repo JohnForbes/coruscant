@@ -22,21 +22,38 @@ class Blocks:
 
   normalised_heights = property(lambda s: s.to_blocks_with_normalised_heights())
 
-  def hstack(self) -> B:
+  def hstack(self, margin=0) -> B:
     if not self._blocks: return B([])
     if len(self._blocks) == 1: return self._blocks[0]
     _blocks = self.normalised_heights
     _lines = []
     _b_0 = _blocks[0]
     for i_line in range(_b_0.h):
-      _lines.append('|'.join([b[i_line] for b in _blocks]))
+      _lines.append(
+        (' '*margin+'|'+' '*margin).join([b[i_line] for b in _blocks])
+      )
     return B(_lines)
+  
+  def vstack(self) -> B:
+    def _f_blocks(blocks):
+      lines = []
+      w = max([b.w for b in blocks])
+      for b in blocks[:-1]:
+        lines += b.lines + ['-'*w]
+      lines += blocks[-1].lines
+      return B(lines)
+    return (
+      _f_blocks(self.blocks)
+      if self.blocks
+      else B([])
+    )
 
 f = lambda x: Blocks(**x)
 
 def t():
   from hak.pf import f as pf
   from hak.pxyz import f as pxyz
+  from hak.pxyf import f as pxyf
 
   def t_init():
     x = {'blocks': [B('a'), B('b')]}
@@ -132,4 +149,33 @@ def t():
     if not t_mismatched_heights(): return pf('!t_mismatched_heightblocks_s')
     return 1
   if not t_hstack(): return pf('t_hstack')
+
+  def t_vstack():
+    u = B([
+      "---------------",
+      "          Info ",
+    ])
+    v = B([
+      " Age | Country ",
+      "-----|---------",
+      "  28 |     USA ",
+      "  35 |  Canada ",
+      "  22 |      UK ",
+      "-----|---------",
+    ])
+    x = {'blocks': [u, v]}
+    y = B([
+      "---------------",
+      "          Info ",
+      "---------------",
+      " Age | Country ",
+      "-----|---------",
+      "  28 |     USA ",
+      "  35 |  Canada ",
+      "  22 |      UK ",
+      "-----|---------",
+    ])
+    z = f(x).vstack()
+    return pxyz(x, y, z, new_line=1)
+  if not t_vstack(): return pf('!t_vstack')
   return 1
