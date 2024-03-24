@@ -69,14 +69,13 @@ def f(test_all=False, t_0=time()):
       f'{pi_index+1:3}/{len(Pi_t)} files.] Checking {py_filepath}'
     ])
     max_len = max(max_len, len(_m))
-    # print(f'{_m:<{max_len}}')
-    
+
     if not has_t(content): return handle_failed_test(
       set(),
       py_filepath,
       danger(" has no ")+warn('t()')
     )
-    
+
     if not has_f(content): return handle_failed_test(
       set(),
       py_filepath,
