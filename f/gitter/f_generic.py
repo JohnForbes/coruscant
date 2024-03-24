@@ -1,9 +1,10 @@
-from hak.file.load import f as load
-from hak.file.save import f as save
-from hak.string.colour.bright.cyan import f as cy
-from hak.string.colour.bright.magenta import f as mag
 from os.path import exists
 from subprocess import run as sprun
+
+from f.string.filepath.load import f as load
+from f.string.to_cy import f as cy
+from f.string.to_mg import f as mag
+from f.strings.filepath_and_content.save import f as save
 
 def f(a, b, ask):
   if exists(a):
