@@ -3,7 +3,7 @@ from f.string_width_and_alignment.to_aligned_string import f as _f_align
 from k.alignment import Alignment as A
 
 class Block:
-  def __init__(self, lines: List, alignment: A=A('centre')):
+  def __init__(self, lines: List=[], alignment: A=A('centre')):
     self._lines = lines
     if not isinstance(alignment, A): raise TypeError('\n'.join([
       'alignment must be of type Alignment',
