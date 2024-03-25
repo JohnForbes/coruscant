@@ -68,6 +68,41 @@ class Blocks:
     )
   )
 
+  w = width = property(lambda s: sum([b.w for b in s._blocks]))
+  count = property(lambda s: len(s._blocks))
+
+  def widen_by_factor(self, factor: float):
+    from math import floor
+    _whole_component = floor(factor)
+    _fractional_component = factor - _whole_component
+    from f.number.round import f as round
+    number_to_round_up = round(_fractional_component * len(self._blocks))
+    _ = 0
+    _new_blocks = []
+    from math import ceil
+    for b in self._blocks:
+      if _ < number_to_round_up:
+        _new_blocks.append(b.widen_by_factor(factor, ceil))
+        _ += 1
+      else:
+        _new_blocks.append(b.widen_by_factor(factor, floor))
+    return Blocks(_new_blocks)
+
+  def widen(self, width: float):
+    width_int = int(width)
+    width_fraction = width - width_int
+    from f.number.round import f as round
+    number_to_round_up = round(width_fraction * len(self._blocks))
+    _ = 0
+    _new_blocks = []
+    for b in self._blocks:
+      if _ < number_to_round_up:
+        _new_blocks.append(b.to_specific_width(width_int+1))
+        _ += 1
+      else:
+        _new_blocks.append(b.to_specific_width(width_int))
+    return Blocks(_new_blocks)
+
 f = lambda x: Blocks(**x)
 
 def t():
@@ -213,4 +248,28 @@ def t():
     x = {'blocks': [B('a'), B('b')]}
     return pxyz(x, 2, len(f(x)))
   if not t_len(): return pf('!t_len')
+
+  def t_widen():
+    x = {'blocks': [B('a'), B('b'), B('c')]}
+    y = Blocks([B([' a ']), B([' b ']), B(['c '])])
+    z = f(x).widen(2+2/3)
+    return pxyz(x, y, z, new_line=1)
+  if not t_widen(): return pf('!t_widen')
+
+  def t_widen_2():
+    x = {
+      'blocks': [
+        B([' b ', '---', 'str', '---', ' y ', ' d ']),
+        B([' c ', '---', 'int', '---', ' 2 ', ' 5 ']),
+        B([' d ', '---', 'int', '---', ' 3 ', ' 6 '])
+      ]
+    }
+    y = Blocks([
+      B(['  b   ', '------', ' str  ', '------', '  y   ', '  d   ']), 
+      B(['  c   ', '------', ' int  ', '------', '  2   ', '  5   ']), 
+      B(['  d  ', '-----', ' int ', '-----', '  3  ', '  6  '])
+    ])
+    z = f(x).widen_by_factor(1.75)
+    return pxyz(x, y, z, new_line=1)
+  if not t_widen_2(): return pf('!t_widen_2')
   return 1
