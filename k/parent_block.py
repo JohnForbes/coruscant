@@ -25,12 +25,11 @@ class ParentBlock(B):
     self._blocks = blocks
     b_base = blocks.hstack(margin=blocks_margin)
     b_name = B([self._name])
-    # print(f'b_name.w: {b_name.w}')
-    # print(f'b_base.w: {b_base.w}')
-    # print()
-    # if b_name.w > b_base.w:
-    #   # expand b_base
-    #   pass
+    
+    if b_name.w > b_base.w:
+      factor = (b_name.w - (blocks.count-1)*(blocks_margin*2+len('|')))/blocks.w
+      _widened = blocks.widen(factor)
+      b_base = _widened.hstack(margin=blocks_margin)
     b = Bs([b_name, b_base]).vstack()
     b = b.carry_down_vertical_lines()
     super().__init__(b.lines)
@@ -61,7 +60,8 @@ def t():
       'blocks': Bs([B(['a', 'c', 'd']), B(['b', 'e'])]),
     }
     y = B(lines=['name ', '-----', 'a | b', 'c | e', 'd |  '])
-    return pxyz(x, [str(y)], [str(f(x))])
+    z = f(x)
+    return pxyz(x, [str(y)], [str(z)])
   if not t_two_child_columns(): return pf('!t_two_child_columns')
   def t_dog_blocks():
     x = {
@@ -116,4 +116,38 @@ def t():
     ])
     return pxyz(x, str(y), str(f(x)), new_line=1)
   if not t_nested(): return pf('!t_nested')
+
+  def t_very_long_name():
+    x = {
+      'address': ('very_long_name',),
+      'blocks_margin': 1,
+      'blocks': Bs([
+        ParentBlock(
+          address=('b',),
+          blocks_margin=1,
+          blocks=Bs([B(['y', 'd'])])
+        ),
+        ParentBlock(
+          address=('c',),
+          blocks_margin=1,
+          blocks=Bs([B([2, 5])])
+        ),
+        ParentBlock(
+          address=('d',),
+          blocks_margin=1,
+          blocks=Bs([B([3, 6])])
+        ),
+      ]),
+    }
+    y = B([
+      'very_long_name',
+      '--------------',
+      ' b  |  c  | d ',
+      '--- | --- | --',
+      ' y  |  2  | 3 ',
+      ' d  |  5  | 6 ',
+    ])
+    z = f(x)
+    return pxyz(x, y, z, new_line=1)
+  if not t_very_long_name(): return pf('!t_very_long_name')
   return 1
