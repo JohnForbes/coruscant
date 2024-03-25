@@ -2,6 +2,7 @@ from typing import List
 
 from f.alignment_string_and_width.to_aligned_string import f as _f_align
 from k.alignment import Alignment as A
+from f.number.round import f as round
 
 class Block:
   def __init__(self, lines: List=[], alignment: A=A('centre')):
@@ -48,6 +49,15 @@ class Block:
   
   __repr__ = lambda self: self.__class__.__name__+'('+repr(self.lines)+')'
   top_line = property(lambda self: self.lines[0])
+  to_specific_width = lambda self, width: Block(
+    lines=[
+      _f_align(alignment=self._alignment, string=str(l), width=width)
+      for l
+      in self._lines
+    ]
+  )
+  def widen_by_factor(self, factor, round_function=round):
+    return self.to_specific_width(round_function(self.width*factor))
 
 f = lambda x: Block(**x)
 
@@ -125,4 +135,12 @@ def t():
     x = {'lines': ['a', 'b', 'c'], 'alignment': rand_alignment()}
     return pxyz(x, f"Block({f(x).lines})", repr(f(x)))
   if not t_repr(): return pf('!t_repr')
+
+  def t_to_specific_width():
+    x = {'lines': ['a', 'b', 'c'], 'alignment': A('centre')}
+    x_w = 5
+    y = ['  a  ', '  b  ', '  c  ']
+    z = f(x).to_specific_width(x_w).lines
+    return pxyz(x, y, z)
+  if not t_to_specific_width(): return pf('!t_to_specific_width')
   return 1
