@@ -1,6 +1,7 @@
 from k.block import Block
 from typing import List
 from k.flat_container import FlatContainer as FC
+from k.parent_block import ParentBlock as PB
 
 def f(dicts: List[dict]) -> Block:
   if not isinstance(dicts, list): raise TypeError('\n'.join([
@@ -13,6 +14,11 @@ def f(dicts: List[dict]) -> Block:
   
   fc = FC(dicts)
   if len(fc.leaf_blocks) == 1: return fc.leaf_blocks[0]
+  from f.string.to_cy import f as cy
+  
+  for lb in fc.leaf_blocks:
+    print(cy(lb))
+  
 
 def t():
   from hak.pf import f as pf
