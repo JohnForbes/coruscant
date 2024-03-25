@@ -45,6 +45,8 @@ class Block:
         revised_line += _
       revised_lines.append(revised_line)
     return Block(revised_lines)
+  
+  __repr__ = lambda self: self.__class__.__name__+'('+repr(self.lines)+')'
 
 f = lambda x: Block(**x)
 
@@ -117,4 +119,9 @@ def t():
     z = f(x).carry_down_vertical_lines().lines
     return pxyz(x['lines'], y, z)
   if not t_carry_down_vert_lines(): return pf('!t_carry_down_vert_lines')
+
+  def t_repr():
+    x = {'lines': ['a', 'b', 'c'], 'alignment': rand_alignment()}
+    return pxyz(x, f"Block({f(x).lines})", repr(f(x)))
+  if not t_repr(): return pf('!t_repr')
   return 1
