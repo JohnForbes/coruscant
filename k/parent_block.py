@@ -21,7 +21,7 @@ class ParentBlock(B):
     if not isinstance(blocks, Bs):
       raise TypeError(f'blocks must be Blocks, got {type(blocks)}')
   
-    self._name = address[-1]
+    self._name = address[-1] if address else ''
     self._blocks = blocks
     b_base = blocks.hstack(margin=blocks_margin)
     b_name = B([self._name])
