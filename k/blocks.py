@@ -29,10 +29,13 @@ class Blocks:
     _blocks = self.evened_heights
     _lines = []
     _b_0 = _blocks[0]
+    margins = []
     for i_line in range(_b_0.h):
-      _lines.append(
-        (' '*margin+'|'+' '*margin).join([b[i_line] for b in _blocks])
-      )
+      margins.append(margin)
+    # print(margins)
+    for i_line in range(_b_0.h):
+      separator = ' '*margins[i_line]+'|'+' '*margins[i_line]
+      _lines.append(separator.join([b[i_line] for b in _blocks]))
     return B(_lines)
   
   def vstack(self) -> B:
@@ -56,6 +59,14 @@ class Blocks:
       f'observed value: {block}'
     ]))
     self._blocks.append(block)
+
+  top_lines = property(lambda self: [b.top_line for b in self._blocks])
+
+  hstack_width = property(
+    lambda s, margin: len(
+      (' '*margin+'|'+' '*margin).join([b[0] for b in s._blocks])
+    )
+  )
 
 f = lambda x: Blocks(**x)
 
