@@ -5,14 +5,17 @@ class Blocks:
   def __init__(self, blocks: List[B]):
     self._blocks = blocks
   
-  __iter__ = lambda self: iter(self._blocks)
-  __getitem__ = lambda self, i: self._blocks[i]
-
-  h_max = property(lambda s: max([b.h for b in s._blocks]))
-
   blocks = property(lambda self: self._blocks)
+  h_max = property(lambda s: max([b.h for b in s._blocks]))
+  evened_heights = property(lambda s: s.to_blocks_with_evened_heights())
 
-  def to_blocks_with_normalised_heights(self):
+  __eq__ = lambda self, other: self.blocks == other.blocks
+  __getitem__ = lambda self, i: self._blocks[i]  
+  __iter__ = lambda self: iter(self._blocks)
+  __len__ = lambda self: len(self.blocks)
+  __repr__ = lambda self: self.__class__.__name__+'('+repr(self.blocks)+')'
+
+  def to_blocks_with_evened_heights(self):
     h_max = self.h_max
     result = Blocks([b for b in self._blocks])
     for b in result:
@@ -20,12 +23,10 @@ class Blocks:
         b.append('')
     return Blocks(result)
 
-  normalised_heights = property(lambda s: s.to_blocks_with_normalised_heights())
-
   def hstack(self, margin=0) -> B:
     if not self._blocks: return B([])
     if len(self._blocks) == 1: return self._blocks[0]
-    _blocks = self.normalised_heights
+    _blocks = self.evened_heights
     _lines = []
     _b_0 = _blocks[0]
     for i_line in range(_b_0.h):
@@ -178,4 +179,19 @@ def t():
     z = f(x).vstack()
     return pxyz(x, y, z, new_line=1)
   if not t_vstack(): return pf('!t_vstack')
+
+  def t_repr():
+    x = {'blocks': [B('a'), B('b')]}
+    return pxyz(x, "Blocks([Block(['a']), Block(['b'])])", repr(f(x)))
+  if not t_repr(): return pf('!t_repr')
+
+  def t_eq():
+    x = {'blocks': [B('a'), B('b')]}
+    return f(x) == f(x)
+  if not t_eq(): return pf('!t_eq')
+
+  def t_len():
+    x = {'blocks': [B('a'), B('b')]}
+    return pxyz(x, 2, len(f(x)))
+  if not t_len(): return pf('!t_len')
   return 1
