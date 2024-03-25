@@ -2,7 +2,12 @@ from k.block import Block as B
 from k.blocks import Blocks as Bs
 
 class ParentBlock(B):
-  def __init__(self, name: str, blocks: Bs, blocks_margin: int=1):
+  def __init__(
+    self,
+    blocks_margin: int,
+    blocks: Bs,
+    name: str,
+  ):
     if not isinstance(blocks, Bs):
       raise TypeError(f'blocks must be Blocks, got {type(blocks)}')
   
@@ -23,24 +28,41 @@ def t():
   from hak.pf import f as pf
   from hak.pxyz import f as pxyz
   def t_one_child_column():
-    x = {'name': 'name', 'blocks': Bs([B(['a', 'c', 'd'])])}
+    x = {
+      'blocks_margin': 1,
+      'blocks': Bs([B(['a', 'c', 'd'])]),
+      'name': 'name',
+    }
     y = B(lines=['name', '----', 'a', 'c', 'd'])
     return pxyz(x, [str(y)], [str(f(x))])
   if not t_one_child_column(): return pf('!t_one_child_column')
   def t_two_child_columns():
-    x = {'name': 'name', 'blocks': Bs([B(['a', 'c', 'd']), B(['b', 'e'])])}
+    x = {
+      'blocks_margin': 1,
+      'blocks': Bs([B(['a', 'c', 'd']), B(['b', 'e'])]),
+      'name': 'name',
+    }
     y = B(lines=['name ', '-----', 'a | b', 'c | e', 'd |  '])
     return pxyz(x, [str(y)], [str(f(x))])
   if not t_two_child_columns(): return pf('!t_two_child_columns')
   def t_dog_blocks():
-    x = {'name': 'dog', 'blocks': Bs([B(['ab', 'de', 'gh'])])}
+    x = {
+      'blocks_margin': 1,
+      'blocks': Bs([B(['ab', 'de', 'gh'])]),
+      'name': 'dog',
+    }
     y = B(lines=['dog', '---', 'ab', 'de', 'gh'])
     return pxyz(x, [str(y)], [str(f(x))])
   if not t_dog_blocks(): return pf('!t_dog_blocks')
   def t_to_three_columns():
     x = {
+      'blocks_margin': 1,
+      'blocks': Bs([
+        B(['a', 'd', 'g']),
+        B(['b', 'e', 'h']),
+        B(['c', 'f', 'i'])
+      ]),
       'name': 'name',
-      'blocks': Bs([B(['a', 'd', 'g']), B(['b', 'e', 'h']), B(['c', 'f', 'i'])])
     }
     y = B(lines=[
       'name',
@@ -56,11 +78,27 @@ def t():
     _cat_blocks = Bs([B(['ab', 'de', 'gh']), B(['c', 'f', 'i'])])
     _fish_blocks = Bs([B(['a', 'b']), B(['d', 'e']), B(['g', 'h'])])
     _blocks = Bs([
-      ParentBlock(name='dog', blocks=_dog_blocks),
-      ParentBlock(name='cat', blocks=_cat_blocks),
-      ParentBlock(name='fish', blocks=_fish_blocks)
+      ParentBlock(
+        blocks_margin=1,
+        blocks=_dog_blocks,
+        name='dog'
+      ),
+      ParentBlock(
+        blocks_margin=1,
+        blocks=_cat_blocks,
+        name='cat'
+      ),
+      ParentBlock(
+        blocks_margin=1,
+        blocks=_fish_blocks,
+        name='fish'
+      )
     ])
-    x = {'name': 'nested', 'blocks': _blocks}
+    x = {
+      'blocks_margin': 1,
+      'blocks': _blocks,
+      'name': 'nested',
+    }
     y = B(lines=[
       '         nested         ',
       '------------------------',
