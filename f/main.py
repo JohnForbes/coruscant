@@ -13,13 +13,13 @@ def f(dicts: List[dict]) -> Block:
   if dicts[0] == {}: return Block()
   
   fc = FC(dicts)
-  if len(fc.leaf_blocks) == 1: return fc.leaf_blocks[0]
-  from f.string.to_cy import f as cy
-  
-  # for lb in fc.leaf_blocks:
-  #   print(cy(lb))
-  return PB(blocks_margin=1, blocks=fc.leaf_blocks, name=fc.leaf_blocks[0].p)
-  
+  if fc.addresses_max_length == 1: return fc.leaf_blocks[0]
+  if fc.addresses_max_length == 2: return PB(
+    address=fc.leaf_blocks[0].ad[:-1],
+    blocks_margin=1,
+    blocks=fc.leaf_blocks,
+  )
+  return ':('
 
 def t():
   from hak.pf import f as pf
@@ -45,7 +45,7 @@ def t():
     return pxyz(x, y, z)
   if not t_type_error(): return pf('!t_type_error')
 
-  def t_nested():
+  def t_nested_2_levels():
     x = [{'a': {'b': 1, 'c': 1}}, {'a': {'b': 2, 'c': 2}}]
     y = Block([
       '    a    ',
@@ -58,5 +58,25 @@ def t():
       ' 2  |  2 ',
     ])
     return pxyf(x, y, f, new_line=1)
-  if not t_nested(): return pf('!t_nested')
+  if not t_nested_2_levels(): return pf('!t_nested_2_levels')
+
+  # def t_nested_3_levels():
+  #   x = [
+  #     {'a': {'b': {'c': 1, 'd': 2}, 'e': {'g': 3, 'h': 4}}},
+  #     {'a': {'b': {'c': 5, 'd': 6}, 'e': {'g': 7, 'h': 8}}}
+  #   ]
+  #   y = Block([
+  #     '          a          ',
+  #     '---------------------',
+  #     '    b     |    e     ',
+  #     '----------|----------',
+  #     ' c  |  d  |  g  |  h ',
+  #     '--- | --- | --- | ---',
+  #     'int | int | int | int',
+  #     '--- | --- | --- | ---',
+  #     ' 1  |  2  |  3  |  4 ',
+  #     ' 5  |  6  |  7  |  8 ',
+  #   ])
+  #   return pxyf(x, y, f, new_line=1)
+  # if not t_nested_3_levels(): return pf('!t_nested_3_levels')
   return 1
