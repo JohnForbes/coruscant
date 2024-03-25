@@ -4,7 +4,19 @@ from k.name import Name as N
 from k.vector import Vector as V
 
 class LeafBlock(B):
-  def __init__(self, vector: V, alignment: A, address: tuple):
+  def __init__(
+    self,
+    address: tuple,
+    alignment: A,
+    vector: V,
+  ):
+    if not isinstance(address, tuple): raise TypeError('\n'.join([
+      'address must be of type tuple',
+      f'observed type: {type(address)}',
+      f'observed value: {address}'
+    ]))
+    self._address = address
+
     if not isinstance(alignment, A): raise TypeError('\n'.join([
       'alignment must be of type Alignment',
       f'observed type: {type(alignment)}',
@@ -12,12 +24,6 @@ class LeafBlock(B):
     ]))
     self._alignment = alignment
 
-    if not isinstance(address, tuple): raise TypeError('\n'.join([
-      'address must be of type tuple',
-      f'observed type: {type(address)}',
-      f'observed value: {address}'
-    ]))
-    self._address = address
     self._name = N(address[-1])
 
     if not isinstance(vector, V): raise TypeError('\n'.join([
@@ -38,7 +44,8 @@ class LeafBlock(B):
     super().__init__(lines=_lines, alignment=alignment)
 
   __repr__ = lambda self: self.__class__.__name__+'('+', '.join([
-    'name='+repr(self._name),
+    'address='+repr(self._address),
+    'alignment='+repr(self._alignment),
     'vector='+repr(self._vector)
   ])+')'
   
@@ -57,7 +64,16 @@ def t():
   from hak.pf import f as pf
   from hak.pxyz import f as pxyz
   from f.random.alignment import f as r_a
-  def t_a():
+  def t_address():
+    x = {
+      'address': ('foo', 'goo'),
+      'vector': V(['a', 'bb']),
+      'alignment': r_a()
+    }
+    return pxyz(x, ('foo', 'goo'), f(x).ad)
+  if not t_address(): return pf('!t_address')
+
+  def t_simple():
     x = {
       'address': ('foo',),
       'vector': V(['a', 'bb']),
@@ -69,14 +85,18 @@ def t():
     )
     z = f(x)
     return pxyz(x, [str(y)], [str(z)], new_line=1)
-  if not t_a(): return pf('!t_a')
+  if not t_simple(): return pf('!t_simple')
   def t_name():
     x = {'address': ('foo',), 'vector': V([0, 1]), 'alignment': r_a()}
     return pxyz(x, N('foo'), f(x).n)
   if not t_name(): return pf('!t_name')
   def t_repr():
     x = {'address': ('foo',), 'vector': V(['a', 'bb']), 'alignment': r_a()}
-    y = "LeafBlock(name=Name('foo'), vector=Vector(['a', 'bb']))"
+    y = 'LeafBlock('+', '.join([
+      f"address=('foo',)",
+      f"alignment={repr(x['alignment'])}",
+      f"vector=Vector(['a', 'bb'])"
+    ])+')'
     return pxyz(x, y, repr(f(x)))
   if not t_repr(): return pf('!t_repr')
   def t_type():
@@ -129,14 +149,6 @@ def t():
     if not t_width_vector_unit(): return pf('!t_width_vector_unit')
     return 1
   if not t_width(): return pf('!t_width')
-  def t_address():
-    x = {
-      'address': ('foo', 'goo'),
-      'vector': V(['a', 'bb']),
-      'alignment': r_a()
-    }
-    return pxyz(x, ('foo', 'goo'), f(x).ad)
-  if not t_address(): return pf('!t_address')
   def t_parent():
     def t_parent_none():
       x = {'address': ('foo',), 'vector': V(['a', 'bb']), 'alignment': r_a()}
