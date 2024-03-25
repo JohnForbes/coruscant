@@ -5,11 +5,18 @@ def f(alignment: A, string: str, width: int) -> str:
     raise TypeError(f'alignment must be Alignment, got {type(alignment)}')
   if not isinstance(string, str):
     raise TypeError(f'string must be str, got {type(string)}')
+  if all([
+    string.replace('-', '').replace(' ', '').replace('|', '') == '',
+    '-' in string
+  ]):
+    fill_char = '-'
+  else:
+    fill_char = ' '
   if not isinstance(width, int):
     raise TypeError(f'width must be int, got {type(width)}')
-  if alignment == A('left'): return f'{string:<{width}}'
-  if alignment == A('centre'): return f'{string:^{width}}'
-  if alignment == A('right'): return f'{string:>{width}}'
+  if alignment == A('left'): return f'{string:{fill_char}<{width}}'
+  if alignment == A('centre'): return f'{string:{fill_char}^{width}}'
+  if alignment == A('right'): return f'{string:{fill_char}>{width}}'
   raise NotImplementedError('\n'.join([
     'This line should be unreachable.',
     'Something went wrong.'
@@ -35,5 +42,8 @@ def t():
   def t_right():
     x = {'string': 'foo', 'width': 5, 'alignment': A('right')}
     return pxyz(x, '  foo', f(**x))
-  if not t_right(): return pf('!t_right')
+  def t_bars():
+    x = {'string': '---', 'width': 5, 'alignment': A('right')}
+    return pxyz(x, '-----', f(**x))
+  if not t_bars(): return pf('!t_bars')
   return 1
