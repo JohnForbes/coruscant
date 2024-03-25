@@ -47,6 +47,7 @@ class Block:
     return Block(revised_lines)
   
   __repr__ = lambda self: self.__class__.__name__+'('+repr(self.lines)+')'
+  top_line = property(lambda self: self.lines[0])
 
 f = lambda x: Block(**x)
 
