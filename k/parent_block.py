@@ -25,15 +25,20 @@ class ParentBlock(B):
     self._blocks = blocks
     b_base = blocks.hstack(margin=blocks_margin)
     b_name = B([self._name])
+    # print(f'b_name.w: {b_name.w}')
+    # print(f'b_base.w: {b_base.w}')
+    # print()
+    # if b_name.w > b_base.w:
+    #   # expand b_base
+    #   pass
     b = Bs([b_name, b_base]).vstack()
     b = b.carry_down_vertical_lines()
     super().__init__(b.lines)
+
   ad = address = property(lambda self: self._address)
   block_count = property(lambda self: self.len(self._blocks))
   p = parent = property(lambda self: self.ad[-2] if len(self.ad) > 1 else None)
   n = name = property(lambda self: self._name)
-
-
 
 f = lambda x: ParentBlock(**x)
 
