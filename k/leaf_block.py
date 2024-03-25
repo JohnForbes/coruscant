@@ -42,6 +42,9 @@ class LeafBlock(B):
     'vector='+repr(self._vector)
   ])+')'
   
+  al = alignment = property(lambda self: self._alignment)
+  ad = address = property(lambda self: self._address)
+  p = parent = property(lambda self: self.ad[-2] if len(self.ad) > 1 else None)
   n = name = property(lambda self: self._name)
   t = type = property(lambda self: self.v.type)
   u = unit = unit_str = property(lambda self: self.v.unit_str)
@@ -126,4 +129,35 @@ def t():
     if not t_width_vector_unit(): return pf('!t_width_vector_unit')
     return 1
   if not t_width(): return pf('!t_width')
+  def t_address():
+    x = {
+      'address': ('foo', 'goo'),
+      'vector': V(['a', 'bb']),
+      'alignment': r_a()
+    }
+    return pxyz(x, ('foo', 'goo'), f(x).ad)
+  if not t_address(): return pf('!t_address')
+  def t_parent():
+    def t_parent_none():
+      x = {'address': ('foo',), 'vector': V(['a', 'bb']), 'alignment': r_a()}
+      return pxyz(x, None, f(x).p)
+    if not t_parent_none(): return pf('!t_parent_none')
+    def t_parent_some():
+      x = {
+        'address': ('foo', 'goo'),
+        'vector': V(['a', 'bb']),
+        'alignment': r_a()
+      }
+      return pxyz(x, 'foo', f(x).p)
+    if not t_parent_some(): return pf('!t_parent_some')
+    return 1
+  if not t_parent(): return pf('!t_parent')
+  def t_alignment():
+    x = {
+      'address': ('foo', '  goo'),
+      'vector': V(['a', 'bb']),
+      'alignment': r_a()
+    }
+    return pxyz(x, x['alignment'], f(x).al)
+  if not t_alignment(): return pf('!t_alignment')
   return 1
