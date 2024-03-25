@@ -48,6 +48,14 @@ class Blocks:
       if self.blocks
       else B([])
     )
+  
+  def append(self, block: B):
+    if not isinstance(block, B): raise TypeError('\n'.join([
+      'block is expected to be of type Block',
+      f'observed type: {type(block)}',
+      f'observed value: {block}'
+    ]))
+    self._blocks.append(block)
 
 f = lambda x: Blocks(**x)
 
