@@ -1,5 +1,8 @@
 from typing import List
 from k.vector import Vector
+from k.leaf_block import LeafBlock as LB
+from k.alignment import Alignment as A
+from k.name import Name as N
 
 class FlatContainer:
   def __init__(self, dicts: List[dict]):
@@ -24,6 +27,11 @@ class FlatContainer:
   }
 
   non_zeroish_vectors = property(lambda self: self._filter_zeroish())
+
+  leaf_blocks = property(lambda self: [
+    LB(address=k, alignment=A('centre'), vector=self._vectors[k])
+    for k in self._vectors
+  ])
 
 from f.dict.nested.flatten import f as flatten
 
@@ -64,4 +72,21 @@ def t():
     z = f(x).non_zeroish_vectors
     return pxyz(x, y, z)
   if not t_b(): return pf('!t_b')
+
+  def t_leaf_blocks():
+    x = {
+      'dicts': [
+        {'a': {'b': 0, 'c': 0}, 'e': {'g': {'h': 6}}},
+        {'a': {'b': 0, 'c': 1}, 'e': {'g': {'h': 7}}},
+        {'a': {'b': 0, 'c': 2}, 'e': {'g': {'h': 8}}},
+      ]
+    }
+    y = [
+      LB(address=('a', 'b'), alignment=A('centre'), vector=Vector([0, 0, 0])),
+      LB(address=('a', 'c'), alignment=A('centre'), vector=Vector([0, 1, 2])),
+      LB(address=tuple('egh'), alignment=A('centre'), vector=Vector([6, 7, 8]))
+    ]
+    z = f(x).leaf_blocks
+    return pxyz(x, y, z)
+  if not t_leaf_blocks(): return pf('!t_leaf_blocks')
   return 1
