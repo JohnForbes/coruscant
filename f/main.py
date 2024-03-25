@@ -104,4 +104,23 @@ def t():
     z = f(x)
     return pxyz(x, y, z, new_line=1)
   if not t_nested_3_levels(): return pf('!t_nested_3_levels')
+
+  # def t_very_long_name():
+  #   x = [
+  #     {'very_very_long_name': {'b': 'y', 'c': 2, 'd': 3}},
+  #     {'very_very_long_name': {'b': 'd', 'c': 5, 'd': 6}},
+  #   ]
+  #   y = Block([
+  #     'very_very_long_name',
+  #     '-------------------',
+  #     '  b   |  c   |  d  ',
+  #     '----- | ---- | ----',
+  #     ' str  | int  | int ',
+  #     '----- | ---- | ----',
+  #     '  y   |  2   |  3  ',
+  #     '  d   |  5   |  6  ',
+  #   ])
+  #   z = f(x)
+  #   return pxyz(x, y, z, new_line=1)
+  # if not t_very_long_name(): return pf('!t_very_long_name')
   return 1
