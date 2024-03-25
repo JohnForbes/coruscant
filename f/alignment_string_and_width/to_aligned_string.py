@@ -5,6 +5,7 @@ def f(alignment: A, string: str, width: int) -> str:
     raise TypeError(f'alignment must be Alignment, got {type(alignment)}')
   if not isinstance(string, str):
     raise TypeError(f'string must be str, got {type(string)}')
+  # string = string.strip()
   if all([
     string.replace('-', '').replace(' ', '').replace('|', '') == '',
     '-' in string
