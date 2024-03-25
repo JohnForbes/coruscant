@@ -16,9 +16,10 @@ class FlatContainer:
 
     self._vectors = {k: Vector(self._dict[k]) for k in self._dict}    
 
+  addresses_max_length = property(lambda self: max([len(k) for k in self.v]))
   record_count = property(lambda self: len(self._dicts))
+  v = vectors = property(lambda self: self._vectors)
   vector_count = property(lambda self: len(self._dict))
-  vectors = property(lambda self: self._vectors)
 
   _filter_zeroish = lambda self: {
     k: self._vectors[k]
@@ -89,4 +90,15 @@ def t():
     z = f(x).leaf_blocks
     return pxyz(x, y, z)
   if not t_leaf_blocks(): return pf('!t_leaf_blocks')
+
+  def t_addresses_max_length():
+    x = {
+      'dicts': [
+        {'a': {'b': 0, 'c': 0}, 'e': {'g': {'h': {'i': 6}}}},
+        {'a': {'b': 0, 'c': 1}, 'e': {'g': {'h': {'i': 7}}}},
+        {'a': {'b': 0, 'c': 2}, 'e': {'g': {'h': {'i': 8}}}},
+      ]
+    }
+    return pxyz(x, 4, f(x).addresses_max_length)
+  if not t_addresses_max_length(): return pf('!t_addresses_max_length')
   return 1
