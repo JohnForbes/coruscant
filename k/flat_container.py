@@ -34,6 +34,11 @@ class FlatContainer:
     for k in self._vectors
   ]))
 
+  leaf_blocks_as_flat_dict = property(lambda self: {
+    k: LB(address=k, alignment=A('centre'), vector=self._vectors[k])
+    for k in self._vectors
+  })
+
 from f.dict.nested.flatten import f as flatten
 
 f = lambda x: FlatContainer(**x)
