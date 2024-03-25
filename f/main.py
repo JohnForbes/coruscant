@@ -16,8 +16,9 @@ def f(dicts: List[dict]) -> Block:
   if len(fc.leaf_blocks) == 1: return fc.leaf_blocks[0]
   from f.string.to_cy import f as cy
   
-  for lb in fc.leaf_blocks:
-    print(cy(lb))
+  # for lb in fc.leaf_blocks:
+  #   print(cy(lb))
+  return PB(blocks_margin=1, blocks=fc.leaf_blocks, name=fc.leaf_blocks[0].p)
   
 
 def t():
@@ -44,17 +45,18 @@ def t():
     return pxyz(x, y, z)
   if not t_type_error(): return pf('!t_type_error')
 
-  # def t_nested():
-  #   x = [{'a': {'b': 1, 'c': 1}}, {'a': {'b': 2, 'c': 2}}]
-  #   y = Block([
-  #     '  a  ',
-  #     '-----',
-  #     'b | c',
-  #     '--|--',
-  #     '1 | 1',
-  #     '2 | 2'
-  #   ])
-  #   z = f(x)
-  #   return pxyz(x, y, z)
-  # if not t_nested(): return pf('!t_nested')
+  def t_nested():
+    x = [{'a': {'b': 1, 'c': 1}}, {'a': {'b': 2, 'c': 2}}]
+    y = Block([
+      '    a    ',
+      '---------',
+      ' b  |  c ',
+      '--- | ---',
+      'int | int',
+      '--- | ---',
+      ' 1  |  1 ',
+      ' 2  |  2 ',
+    ])
+    return pxyf(x, y, f, new_line=1)
+  if not t_nested(): return pf('!t_nested')
   return 1
