@@ -23,14 +23,15 @@ class ParentBlock(B):
   
     self._name = address[-1] if address else ''
     self._blocks = blocks
-    b_base = blocks.hstack(margin=blocks_margin)
-    b_name = B([self._name])
+    _base = blocks.hstack(margin=blocks_margin)
+    _name = B([self._name])
     
-    if b_name.w > b_base.w:
-      factor = (b_name.w - (blocks.count-1)*(blocks_margin*2+len('|')))/blocks.w
-      _widened = blocks.widen(factor)
-      b_base = _widened.hstack(margin=blocks_margin)
-    b = Bs([b_name, b_base]).vstack()
+    if _name.w > _base.w:
+      factor = (_name.w - (blocks.count-1)*(blocks_margin*2+len('|')))/blocks.w
+      _widened = blocks.widen_by_factor(factor)
+      _base = _widened.hstack(margin=blocks_margin)
+
+    b = Bs([_name, _base]).vstack()
     b = b.carry_down_vertical_lines()
     super().__init__(b.lines)
 
@@ -150,4 +151,40 @@ def t():
     z = f(x)
     return pxyz(x, y, z, new_line=1)
   if not t_very_long_name(): return pf('!t_very_long_name')
+
+  def t_very_very_long_name():
+    from k.leaf_block import LeafBlock
+    from k.alignment import Alignment
+    from k.vector import Vector
+    x = {
+      'address': ('very_very_long_name',),
+      'blocks_margin': 1,
+      'blocks': Bs([
+        LeafBlock(
+          address=('very_very_long_name', 'b'),
+          alignment=Alignment('c'), vector=Vector(['y', 'd'])
+        ),
+        LeafBlock(
+          address=('very_very_long_name', 'c'),
+          alignment=Alignment('c'), vector=Vector([2, 5])
+        ),
+        LeafBlock(
+          address=('very_very_long_name', 'd'),
+          alignment=Alignment('c'), vector=Vector([3, 6])
+        )
+      ])
+    }
+    y = B([
+      'very_very_long_name',
+      '-------------------',
+      '  b   |  c   |  d  ',
+      '----- | ---- | ----',
+      ' str  | int  | int ',
+      '----- | ---- | ----',
+      '  y   |  2   |  3  ',
+      '  d   |  5   |  6  ',
+    ])
+    z = f(x)
+    return pxyz(x, y, z, new_line=1)
+  if not t_very_very_long_name(): return pf('!t_very_very_long_name')
   return 1
