@@ -7,24 +7,20 @@ from k.leaf_block import LeafBlock as LB
 from k.blocks import Blocks as Bs
 from k.block import Block as B
 
-def _accumulate(x, path_so_far=['α']):
+def _accumulate(x, path_so_far=['α'], margin=1):
   if isinstance(x, dict):
-    _blocks = Bs(blocks=[])
-    for k in x:
-      if isinstance(x[k], B):
-        _blocks.append(x[k])
-      else:
-        _blocks.append(_accumulate(x[k], path_so_far + [k]))
-    return PB(tuple(path_so_far), 1, _blocks)
+    _blocks = Bs(blocks=[
+      x[k] if isinstance(x[k], B) else _accumulate(x[k], path_so_far + [k])
+      for k in x
+    ])
+    return PB(address=tuple(path_so_far), blocks=_blocks, blocks_margin=margin)
   else:
-    if isinstance(x, B):
-      return x
-    else:
-      raise TypeError('\n'.join([
-        'x is expected to be either a Block or a dict',
-        f'observed type: {type(x)}',
-        f'observed value: {x}'
-      ]))
+    if isinstance(x, B): return x
+    else: raise TypeError('\n'.join([
+      'x is expected to be either a Block or a dict',
+      f'observed type: {type(x)}',
+      f'observed value: {x}'
+    ]))
 
 def f(dicts: List[dict]) -> Block:
   if not isinstance(dicts, list): raise TypeError('\n'.join([
@@ -113,12 +109,12 @@ def t():
     y = Block([
       'very_very_long_name',
       '-------------------',
-      '  b   |  c  |  d   ',
-      '----- | --- | -----',
-      ' str  | int | int  ',
-      '----- | --- | -----',
-      '  y   |  2  |  3   ',
-      '  d   |  5  |  6   ',
+      '  b   |  c   |  d  ',
+      '----- | ---- | ----',
+      ' str  | int  | int ',
+      '----- | ---- | ----',
+      '  y   |  2   |  3  ',
+      '  d   |  5   |  6  ',
     ])
     z = f(x)
     return pxyz(x, y, z, new_line=1)
